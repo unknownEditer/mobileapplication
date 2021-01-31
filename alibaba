@@ -1,0 +1,373 @@
+import React,{useState} from 'react';
+import {View,TextInput,Text,Button,TouchableOpacity,ImageBackground,Alert,FlatList,Image} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {GlobalStyles} from './styles/globalStyles';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createDrawerNavigator,DrawerContentScrollView,DrawerItemList,DrawerItem} from '@react-navigation/drawer';
+import {Ionicons} from '@expo/vector-icons';
+
+
+var name;
+
+function LoginScreen({navigation}){
+  const [username,setUsername]=useState('');
+  const [password,setPassword]=useState('');
+
+  return(
+    <ImageBackground source={require('./assets/images/loginBack.png')} style={GlobalStyles.loginImg}>
+      <View style={GlobalStyles.loginContainer}>
+        <TextInput
+          placeholder="Username or Email"
+          style={GlobalStyles.loginInput}
+          onChangeText={username=>setUsername(username)}
+          defaultValue={username}
+        />
+
+        <TextInput
+          placeholder="Password"
+          style={GlobalStyles.loginInput}
+          onChangeText={password=>setPassword(password)}
+          defaultValue={password}
+          secureTextEntry
+        />
+
+        <TouchableOpacity
+          style={GlobalStyles.loginBtn}
+          
+          onPress={()=>{
+            var uname=username;
+            var pword=password;
+
+            if(uname=='admin' && pword=='asd'){
+              Alert.alert("login success");
+              name=uname;
+              navigation.navigate("Draw",{});
+            }else{
+              Alert.alert("wrong credentials");
+            }
+          }}
+        >
+          <Text style={GlobalStyles.loginBtnText}>Login</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
+  )
+}
+
+function HomeScreen(route,{navigator}){
+  return(
+    <View style={GlobalStyles.homeContainer}>
+      <Text style={GlobalStyles.homeText}>Welcome to Monkey Premium Products</Text>
+    </View>
+  )
+}
+{/**product list */}
+
+
+function ProductScreen({navigation}){
+
+  const[reviews,setPath]=useState([
+  {path:require("./assets/images/loginBack.png"),key:1},
+  {path:require("./assets/images/loginBack.png"),key:2},
+  {path:require("./assets/images/loginBack.png"),key:3},
+  {path:require("./assets/images/loginBack.png"),key:4},
+  {path:require("./assets/images/loginBack.png"),key:5},
+  {path:require("./assets/images/loginBack.png"),key:6},
+  
+  ]);
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={GlobalStyles.imageWrap}>
+          <TouchableOpacity onPress={()=>navigation.navigate('Checkout')}>
+            <Image style={GlobalStyles.productImg} source={require("./assets/images/loginBack.png")}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>navigation.navigate('Checkout')}>
+            <Image style={GlobalStyles.productImg} source={require("./assets/images/loginBack.png")}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>navigation.navigate('Checkout')}>
+            <Image style={GlobalStyles.productImg} source={require("./assets/images/loginBack.png")}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>navigation.navigate('Checkout')}>
+            <Image style={GlobalStyles.productImg} source={require("./assets/images/loginBack.png")}/>
+          </TouchableOpacity>
+        </View>
+
+        <View style={GlobalStyles.imageWrap}>
+          <TouchableOpacity onPress={()=>navigation.navigate('Checkout')}>
+            <Image style={GlobalStyles.productImg} source={require("./assets/images/loginBack.png")}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>navigation.navigate('Checkout')}>
+            <Image style={GlobalStyles.productImg} source={require("./assets/images/loginBack.png")}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>navigation.navigate('Checkout')}>
+            <Image style={GlobalStyles.productImg} source={require("./assets/images/loginBack.png")}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>navigation.navigate('Checkout')}>
+            <Image style={GlobalStyles.productImg} source={require("./assets/images/loginBack.png")}/>
+          </TouchableOpacity>
+        </View>
+    </View>
+  );
+}
+
+function CheckoutScreen({navigation}){
+  const[pname,setP]=useState('');
+  const[ploc,setL]=useState('');
+  const[swift,setS]=useState('');
+
+  return(
+    <View style={GlobalStyles.checkoutCont}>
+      <View style={GlobalStyles.checkCont2}>
+        <TextInput
+            placeholder="productname"
+            style={GlobalStyles.checkInput}
+            onChangeText={pname=>setP(pname)}
+        />
+
+        <TextInput
+            placeholder="product location"
+            style={GlobalStyles.checkInput}
+            onChangeText={ploc=>setL(ploc)}
+        />
+
+        <TextInput
+            placeholder="swift code"
+            style={GlobalStyles.checkInput}
+            onChangeText={swift=>setS(swift)}
+        />
+        <Button onPress={() =>{
+          var a=pname;
+          var b=ploc;
+          var c=swift;
+          Alert.alert("Product "+a+" will be delivered to "+ploc+" charges will  be reduce from swift code: "+swift)
+        }}
+         title="Proceed" style={GlobalStyles.loginBtn}/>
+      </View>
+    </View>
+  )
+}
+
+{/**about screen */}
+function AboutScreen({navigation}){
+  return(
+    <View>
+      <Text>About Screen</Text>
+    </View>
+  )
+}
+
+{/*drawer dispathch screen */}
+function DrawerDispatch({navigation}){
+  return(
+    <View>
+      <Text>Close Drawer</Text>
+      
+    </View>
+  )
+}
+
+{/*Signout screen */}
+
+
+const Tab=createBottomTabNavigator();
+
+function TabNav(){
+  return(
+    
+      <Tab.Navigator
+        screenOptions={({route})=>({
+          tabBarIcon:({focused})=>{
+            let iconName;
+
+            if(route.name=="Home"){
+              iconName=focused
+              ?'ios-information-circle'
+              :'ios-information-circle-outline';
+
+            }else if(route.name=="Setting"){
+              iconName=focused
+              ?'ios-list-box':'ios-list';
+            }
+            return <Ionicons name={iconName} size={18} color='green'/>
+          },
+        })}
+      >
+        <Tab.Screen name="Home" component={HomeScreen}/>
+        <Tab.Screen name="Product" component={ProductScreen}/>
+        <Tab.Screen name="Checkout" component={CheckoutScreen}/>
+      </Tab.Navigator>
+    
+  )
+}
+
+const Stack=createStackNavigator();
+
+function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      <DrawerItem
+        label="Close drawer"
+        onPress={() => props.navigation.closeDrawer()}
+      />
+      <DrawerItem
+        label="Sign OUT"
+        onPress={()=>props.navigation.navigate("Login")}
+        />
+    </DrawerContentScrollView>
+  );
+}
+
+{/**initial navigationn login func */}
+
+
+{/**drawer navigation funciotn */}
+function Draw(){
+  return(
+      <Drawer.Navigator initialRouteName="HomeScreen" drawerContent={props => <CustomDrawerContent {...props} />}>
+        <Drawer.Screen
+          name="HomeScreen"
+          component={TabNav}
+        />
+
+        <Drawer.Screen
+          name="About"
+          component={AboutScreen}
+        />
+
+        
+      </Drawer.Navigator>
+
+
+  )
+}
+
+const Drawer=createDrawerNavigator();
+
+{/**control function */}
+export default function App(){
+  return(
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          header={{
+            visible:false
+          }}
+          options={{
+
+            headerTitle:"Welcome to MPP",
+            headerLeft:null,
+            navigationOptons:{
+              headerLeft:null,
+            }
+          }}
+          navigationOptons={{
+            headerLeft:null
+          }} 
+        />
+
+        <Stack.Screen
+          name="Draw"
+          component={Draw}
+          header={{
+            visible:false
+          }}
+          options={{
+            headerTitle:"Home Screen"
+            
+          }}
+          navigationOptons={{
+            headerLeft:null
+          }}
+        />
+
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
+
+********************************************************
+
+import {StyleSheet} from 'react-native';
+
+export const  GlobalStyles=StyleSheet.create({
+  loginImg:{
+    width:'100%',
+    height:'undefined',
+    aspectRatio:1,
+  },
+  loginContainer:{
+    top:'100%',
+    flex:1,
+    backgroundColor:'#fff',
+  },
+  loginInput:{
+    backgroundColor:'skyblue',
+    padding:10,
+    borderRadius:10,
+    margin:10,
+    fontSize:18,
+    
+    
+  },
+  loginBtn:{
+    backgroundColor:'orange',
+    padding:10,
+    borderRadius:10,
+    margin:10,
+    fontSize:18,
+  },
+  loginBtnText:{
+    textAlign:'center',
+    fontWeight:'bold',
+    fontSize:25,
+  },
+  homeContainer:{
+    marginTop:'40%',
+  },
+  homeText:{
+    fontSize:'30',
+    fontColor:'skyblue',
+    textAlign:'center',
+    
+  },
+  checkoutText:{
+    flexDirection:'row',
+    
+  },
+  checkoutCont:{
+    flex:1,
+    backgroundColor:'#fff',
+  },
+  checkInput:{
+    backgroundColor:'skyblue',
+    padding:10,
+    borderRadius:10,
+    margin:10,
+    
+    fontSize:18,
+  },
+  checkCont2:{
+    marginTop:'20%'
+  },
+  imageWrap:{
+    flexDirection:'row',
+    justifyContent:'space-around',
+    alignItems:'center',
+    marginTop:'30'
+  },
+  productImg:{
+    width:50,
+    height:50,
+  }
+});
